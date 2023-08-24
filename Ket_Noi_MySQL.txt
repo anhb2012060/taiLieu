@@ -1,0 +1,94 @@
+=========================MySQL======================================
+
+<dependencies>
+      <dependency>
+          <groupId>com.mysql</groupId>
+          <artifactId>mysql-connector-j</artifactId>
+          <version>8.0.33</version>
+       </dependency>
+</dependencies>
+
+=====================TSTL======================================
+
+<dependency>
+    <groupId>javax.servlet</groupId>
+        <artifactId>jstl</artifactId>
+        <version>1.2</version>
+</dependency>
+
+=====================Hibernate======================================
+
+<dependencies>
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>5.5.7.Final</version> 
+    </dependency>
+</dependencies>
+
+===================Tạo class dùng kết nối với DB====================
+package database;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DatabaseHelper {
+	public static Connection openConnection() throws Exception {
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		String url = "jdbc:mysql://localhost:3306/QLSinhVien";
+		String username = "root";
+		String password = "26112002";
+		Connection con  = DriverManager.getConnection(url,username,password);
+		return con;
+	}
+}
+
+=============Ví dụ cách sử 1 hàm để truy xuất DB=======================
+//HÀM THÊM 1 SINH VIÊN VÀO DATABASE
+	public boolean insert(Student stu) throws Exception{
+		String sql = "insert into student(maSinhVien, hoTen, email,soDienThoai, gioiTinh,diaChi) values (?,?,?,?,?,?)";
+		try {
+			Connection con = DatabaseHelper.openConnection();
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			
+			pstmt.setString(1,stu.getMaSinhVien());
+			pstmt.setString(2,stu.getHoTen());
+			pstmt.setString(3,stu.getEmail());
+			pstmt.setString(4,stu.getSoDienThoai());
+			pstmt.setInt(5, stu.getGioiTinh());
+			pstmt.setString(6,stu.getDiaChi());
+			
+			return pstmt.executeUpdate() > 0 ;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+
+=================cách sử dụng hàm trong lớp view===========================
+//HÀM LƯU DỮ LIỆU MỚI VÀO DATABASE
+	public void save() {
+		if(jTextField_Empty(jTextField_MaSV, "Mã sinh viên không được để trống")) {
+			try {
+				Student stu = new Student();
+				stu.setMaSinhVien(jTextField_MaSV.getText());
+				stu.setHoTen(jTextField_HoTen.getText());
+				stu.setEmail(jTextField_Email.getText());
+				stu.setDiaChi(jTextField_DiaChi.getText());
+				stu.setSoDienThoai(jTextField_SoDienThoai.getText());
+				stu.setGioiTinh(jRadioButton_Nam.isSelected()?1:0);
+				
+				StudentDao dao = new StudentDao();
+				dao.insert(stu);
+				
+				JOptionPane.showMessageDialog(this, "Mã sinh viên mới đã được thêm vào CSDL");
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+				e.printStackTrace();
+			}
+			st.loadDataToTable(tblModel);
+		}
+	}
