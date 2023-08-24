@@ -1,0 +1,38 @@
+1. Mở thư mục cần lưu dự án: chạy cmd và chạy các dòng lệnh sau:
+
+	echo "# test" >> README.md
+	git init
+	git add README.md
+	git commit -m "first commit"
+	git branch -M main
+	git remote add origin << https://github.com/anhb2012060/productionProblem.git >> (thay link thành link github cần up project)
+	git push -u origin main
+
+2. Xem có file nào thay đổi => git status 
+
+	3.1 Chọn tất cả các file => git add .  
+
+	3.2 Chọn những file nào cần commit để push lên github => git add namefile 
+
+4. Ghi chú thích cho file chuẩn bị push lên github => git commit -m "Tiêu đề mún đặt" 
+
+5. Tải file lên github => git push origin main 
+
+6. Muốn tải file về máy phiên bản mới nhất => git pull origin main 
+
+7. Kiểm tra máy có bao nhiêu branch => git branch 
+
+8. Tạo 1 nhánh (branch mới) => git checkout -b <<nameBranch>> 
+
+9. Cách lấy 1 project từ github về máy:
+	9.1 Tạo 1 thư mục trống.
+	9.2 Mở cmd
+	9.3 Chạy lệnh =>  git clone <<link project on github>>
+
+upload 1 file lên github:
+git init
+git add test.txt
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/anhb2012060/test2.git
+git push -u origin main
